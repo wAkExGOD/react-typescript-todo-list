@@ -56,6 +56,18 @@ export class App extends Component<{}, TodoListState> {
     })
   }
 
+  getFilteredTasks = () => {
+    const { tasks, showOnlyUncompletedTasks } = this.state
+
+    return showOnlyUncompletedTasks
+      ? tasks
+          .sort((t1, t2) => t2.createdAtTimestamp - t1.createdAtTimestamp)
+          .filter((task) => task.isDone === false)
+      : tasks
+          .sort((t1, t2) => t2.createdAtTimestamp - t1.createdAtTimestamp)
+          .sort((t1, t2) => Number(t1.isDone) - Number(t2.isDone))
+  }
+
   componentDidUpdate() {
     storage.syncTasks(this.state.tasks)
   }
@@ -79,16 +91,11 @@ export class App extends Component<{}, TodoListState> {
       handleToggleStatus,
       handleDelete,
       handleToggleFilter,
+      getFilteredTasks,
     } = this
     const { tasks, showOnlyUncompletedTasks } = this.state
 
-    const filteredTasks = showOnlyUncompletedTasks
-      ? tasks
-          .sort((t1, t2) => t2.createdAtTimestamp - t1.createdAtTimestamp)
-          .filter((task) => task.isDone === false)
-      : tasks
-          .sort((t1, t2) => t2.createdAtTimestamp - t1.createdAtTimestamp)
-          .sort((t1, t2) => Number(t1.isDone) - Number(t2.isDone))
+    const filteredTasks = getFilteredTasks()
 
     return (
       <div className="flex flex-col p-6 gap-6 w-container max-w-full mx-auto">
