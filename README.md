@@ -1,50 +1,40 @@
-# React + TypeScript + Vite
+# Todo List
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![TodoListScreen](https://github.com/user-attachments/assets/cd3f991d-a056-404d-9e4c-742dc069c4cb)
 
-Currently, two official plugins are available:
+## Описание проекта
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Этот проект представляет собой простое приложение "Список дел", которое позволяет пользователям добавлять, удалять и отслеживать задачи. Приложение написано на TypeScript и поддерживает синхронизацию с Local Storage, что позволяет сохранять данные между сессиями.
 
-## Expanding the ESLint configuration
+## Функциональные требования
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+1. **Добавление задачи**
+   - Поле ввода для заголовка
+   - Поле ввода для описания
+   - Кнопка "Добавить" для создания новой задачи
 
-- Configure the top-level `parserOptions` property like this:
+2. **Статус задачи**
+   - Каждая задача имеет чекбокс, позволяющий отметить ее как выполненную или нет.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+3. **Удаление задачи**
+   - Возможность удаления задачи из списка.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+4. **Сортировка задач**
+   - Выполненные задачи отображаются после невыполненных.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+5. **Фильтрация задач**
+   - Фильтр "Только невыполненные", который скрывает выполненные задачи.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## Дополнительные функции
+
+- **Специальное поведение кнопки "Удалить" на мобильных устройствах**
+  - Убедитесь, что кнопка удаления интуитивно понятна и легко доступна на мобильных экранах.
+
+- **Синхронизация с Local Storage**
+  - Все задачи сохраняются в Local Storage, что позволяет восстанавливать список после перезагрузки страницы.
+
+## Установка и запуск
+
+- git clone https://github.com/wAkExGOD/react-typescript-todo-list.git .
+- pnpm i
+- pnpm dev
