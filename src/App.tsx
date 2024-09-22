@@ -1,6 +1,6 @@
 import { Component, createRef, RefObject } from "react"
 import { Checkbox, Separator } from "@/components/ui"
-import { CreateTaskForm, Todo } from "@/components/common"
+import { CreateTaskForm, Todo } from "@/components"
 import type { TaskWithoutId, Task } from "@/types"
 import { getNewTaskId, storage } from "@/helpers"
 
@@ -73,6 +73,11 @@ export class App extends Component<{}, TodoListState> {
   }
 
   componentDidMount() {
+    // Setting shadcn/ui theme:
+    const root = window.document.documentElement
+    root.classList.remove("light", "dark")
+    root.classList.add("dark")
+
     const savedTasks = storage.getTasks()
 
     if (!savedTasks.length) {
