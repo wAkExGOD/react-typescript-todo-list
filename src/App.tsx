@@ -1,12 +1,12 @@
 import { Component, createRef, RefObject } from "react"
 import { Label, Separator, Switch } from "@/components/ui"
 import { CreateTodoForm, TodoItem } from "@/components"
-import type { TaskWithoutId, Task } from "@/types"
-import { getUniqueTaskId, storage } from "@/helpers"
+import { storage } from "@/helpers"
+import type { Task } from "@/types"
 
 type TodoListState = {
   tasks: Task[]
-  showOnlyUncompletedTasks: boolean
+  hideCompletedTasks: boolean
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -18,18 +18,13 @@ export class App extends Component<{}, TodoListState> {
     this.titleInput = createRef()
     this.state = {
       tasks: [],
-      showOnlyUncompletedTasks: false,
+      hideCompletedTasks: false,
     }
   }
 
-  handleCreateTaskSubmit = (task: TaskWithoutId) => {
-    const newTask = {
-      id: getUniqueTaskId(),
-      ...task,
-    }
-
+  handleCreateTaskSubmit = (task: Task) => {
     this.setState((state) => ({
-      tasks: [...state.tasks, newTask],
+      tasks: [...state.tasks, task],
     }))
 
     this.titleInput.current?.focus()
@@ -52,14 +47,14 @@ export class App extends Component<{}, TodoListState> {
 
   handleToggleFilter = (isChecked: boolean) => {
     this.setState({
-      showOnlyUncompletedTasks: isChecked,
+      hideCompletedTasks: isChecked,
     })
   }
 
   getFilteredTasks = () => {
-    const { tasks, showOnlyUncompletedTasks } = this.state
+    const { tasks, hideCompletedTasks } = this.state
 
-    return showOnlyUncompletedTasks
+    return hideCompletedTasks
       ? tasks
           .sort((t1, t2) => t2.createdAtTimestamp - t1.createdAtTimestamp)
           .filter((task) => task.isDone === false)
@@ -100,7 +95,7 @@ export class App extends Component<{}, TodoListState> {
       handleToggleFilter,
       getFilteredTasks,
     } = this
-    const { tasks, showOnlyUncompletedTasks } = this.state
+    const { tasks, hideCompletedTasks } = this.state
 
     const filteredTasks = getFilteredTasks()
 
@@ -118,7 +113,7 @@ export class App extends Component<{}, TodoListState> {
           <div className="flex items-center space-x-2">
             <Switch
               id="only-uncompleted-tasks"
-              checked={showOnlyUncompletedTasks}
+              checked={hideCompletedTasks}
               onCheckedChange={handleToggleFilter}
             />
             <Label htmlFor="only-uncompleted-tasks" className="cursor-pointer">

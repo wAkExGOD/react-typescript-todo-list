@@ -5,5 +5,3 @@ export type Task = {
   createdAtTimestamp: number
   isDone: boolean
 }
-
-export type TaskWithoutId = Omit<Task, "id">

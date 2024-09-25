@@ -1,16 +1,18 @@
 import { Component, RefObject } from "react"
 import { Textarea, Button, Input, Label } from "@/components/ui"
-import { type TaskWithoutId, type Task } from "@/types"
 import { PlusCircledIcon } from "@radix-ui/react-icons"
+import { getUniqueTodoId } from "@/helpers"
+import type { Task } from "@/types"
+
+const MIN_TITLE_LENGTH = 3
+const MAX_TITLE_LENGTH = 80
 
 type CreateTodoFormProps = {
   inputRef: RefObject<HTMLInputElement>
-  onSubmit: (task: TaskWithoutId) => void
+  onSubmit: (task: Task) => void
 }
 
-type CreateTodoFormState = {
-  title: Task["title"]
-  description: Task["description"]
+type CreateTodoFormState = Pick<Task, "title" | "description"> & {
   error: string
 }
 
@@ -32,9 +34,9 @@ export class CreateTodoForm extends Component<
 
     const { title, description } = this.state
 
-    if (!title.length) {
+    if (title.length < MIN_TITLE_LENGTH || title.length > MAX_TITLE_LENGTH) {
       return this.setState({
-        error: "Title must not be empty string",
+        error: `The title must be between ${MIN_TITLE_LENGTH} and ${MAX_TITLE_LENGTH} characters long`,
       })
     }
 
@@ -44,12 +46,11 @@ export class CreateTodoForm extends Component<
       })
     }
 
-    const createdAtTimestamp = Math.floor(Date.now() / 1000)
-
     this.props.onSubmit({
+      id: getUniqueTodoId(),
+      createdAtTimestamp: Math.floor(Date.now() / 1000),
       title,
       description,
-      createdAtTimestamp,
       isDone: false,
     })
 
