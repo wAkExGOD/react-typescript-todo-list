@@ -1,6 +1,6 @@
 # Todo List
 
-![TodoListScreen](https://github.com/user-attachments/assets/cd3f991d-a056-404d-9e4c-742dc069c4cb)
+![image](https://github.com/user-attachments/assets/f682065b-626a-42f4-975c-3848cca81328)
 
 ## Описание проекта
 
