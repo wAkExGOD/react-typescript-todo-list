@@ -1,8 +1,8 @@
 import { Component, createRef, RefObject } from "react"
-import { Checkbox, Separator } from "@/components/ui"
-import { CreateTaskForm, Todo } from "@/components"
+import { Label, Separator, Switch } from "@/components/ui"
+import { CreateTodoForm, TodoItem } from "@/components"
 import type { TaskWithoutId, Task } from "@/types"
-import { getNewTaskId, storage } from "@/helpers"
+import { getUniqueTaskId, storage } from "@/helpers"
 
 type TodoListState = {
   tasks: Task[]
@@ -24,7 +24,7 @@ export class App extends Component<{}, TodoListState> {
 
   handleCreateTaskSubmit = (task: TaskWithoutId) => {
     const newTask = {
-      id: getNewTaskId(this.state.tasks),
+      id: getUniqueTaskId(),
       ...task,
     }
 
@@ -68,10 +68,6 @@ export class App extends Component<{}, TodoListState> {
           .sort((t1, t2) => Number(t1.isDone) - Number(t2.isDone))
   }
 
-  componentDidUpdate() {
-    storage.syncTasks(this.state.tasks)
-  }
-
   componentDidMount() {
     // Setting shadcn/ui theme:
     const root = window.document.documentElement
@@ -87,6 +83,12 @@ export class App extends Component<{}, TodoListState> {
     this.setState({
       tasks: savedTasks,
     })
+
+    this.titleInput.current?.focus()
+  }
+
+  componentDidUpdate() {
+    storage.syncTasks(this.state.tasks)
   }
 
   render() {
@@ -103,40 +105,37 @@ export class App extends Component<{}, TodoListState> {
     const filteredTasks = getFilteredTasks()
 
     return (
-      <div className="flex flex-col p-6 gap-6 w-container max-w-full mx-auto">
+      <div className="flex flex-col p-6 gap-8 w-container max-w-full mx-auto">
         <h1 className="text-3xl font-bold text-center">Todo List</h1>
-        <Separator />
 
-        <CreateTaskForm
+        <CreateTodoForm
           onSubmit={handleCreateTaskSubmit}
           inputRef={titleInput}
         />
         <Separator />
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-4">
           <div className="flex items-center space-x-2">
-            <Checkbox
+            <Switch
               id="only-uncompleted-tasks"
               checked={showOnlyUncompletedTasks}
               onCheckedChange={handleToggleFilter}
             />
-            <label
-              htmlFor="only-uncompleted-tasks"
-              className="text-sm font-medium leading-none"
-            >
-              Only uncompleted tasks
-            </label>
+            <Label htmlFor="only-uncompleted-tasks" className="cursor-pointer">
+              Hide completed tasks
+            </Label>
           </div>
+
           <div className="flex flex-col gap-2">
             {!filteredTasks.length ? (
-              <p className="text-center">
+              <p className="text-center text-secondary">
                 {!tasks.length
-                  ? "You have no tasks"
-                  : "You have no tasks with this filter"}
+                  ? "You don't have any tasks at the moment"
+                  : "You don't have any tasks with this filter"}
               </p>
             ) : (
               filteredTasks.map((task) => (
-                <Todo
+                <TodoItem
                   key={task.id}
                   data={task}
                   onStatusToggle={handleToggleStatus}

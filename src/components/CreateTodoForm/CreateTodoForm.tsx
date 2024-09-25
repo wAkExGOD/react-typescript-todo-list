@@ -1,23 +1,24 @@
 import { Component, RefObject } from "react"
-import { Textarea, Button, Input } from "@/components/ui"
+import { Textarea, Button, Input, Label } from "@/components/ui"
 import { type TaskWithoutId, type Task } from "@/types"
+import { PlusCircledIcon } from "@radix-ui/react-icons"
 
-type CreateTaskFormProps = {
+type CreateTodoFormProps = {
   inputRef: RefObject<HTMLInputElement>
   onSubmit: (task: TaskWithoutId) => void
 }
 
-type CreateTaskFormState = {
+type CreateTodoFormState = {
   title: Task["title"]
   description: Task["description"]
   error: string
 }
 
-export class CreateTaskForm extends Component<
-  CreateTaskFormProps,
-  CreateTaskFormState
+export class CreateTodoForm extends Component<
+  CreateTodoFormProps,
+  CreateTodoFormState
 > {
-  constructor(props: CreateTaskFormProps) {
+  constructor(props: CreateTodoFormProps) {
     super(props)
     this.state = {
       title: "",
@@ -73,24 +74,35 @@ export class CreateTaskForm extends Component<
     const { inputRef } = this.props
 
     return (
-      <form className="flex flex-col gap-2" onSubmit={this.handleFormSubmit}>
-        <Input
-          type="text"
-          placeholder="Enter the title of a task"
-          value={title}
-          onChange={handleTitleChange}
-          ref={inputRef}
-        />
-        <Textarea
-          placeholder="Enter the description of a task"
-          value={description}
-          onChange={handleDescriptionChange}
-          rows={6}
-        />
+      <form className="flex flex-col gap-3" onSubmit={this.handleFormSubmit}>
+        <div className="grid w-full items-center gap-1.5">
+          <Label htmlFor="title">Title</Label>
+          <Input
+            id="title"
+            type="text"
+            placeholder="Enter the title of a task"
+            value={title}
+            onChange={handleTitleChange}
+            ref={inputRef}
+          />
+        </div>
+        <div className="grid w-full items-center gap-1.5">
+          <Label htmlFor="description">Description</Label>
+          <Textarea
+            id="description"
+            placeholder="Enter the description of a task"
+            value={description}
+            onChange={handleDescriptionChange}
+            rows={6}
+          />
+        </div>
+
         {error && (
           <p className="text-sm font-medium text-destructive">{error}</p>
         )}
-        <Button type="submit">Add</Button>
+        <Button type="submit">
+          <PlusCircledIcon className="mr-1.5 h-4 w-4" /> Add
+        </Button>
       </form>
     )
   }

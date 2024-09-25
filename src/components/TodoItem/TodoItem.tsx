@@ -1,18 +1,19 @@
 import { Component } from "react"
 import { type Task } from "@/types"
 import { cn } from "@/lib/utils"
-import { formatTimestamp } from "@/helpers"
+import { timeAgo } from "@/helpers"
 import { Button, Checkbox } from "@/components/ui"
-import styles from "./Todo.module.css"
+import { TrashIcon } from "@radix-ui/react-icons"
+import styles from "./TodoItem.module.css"
 
-type TodoProps = {
+type TodoItemProps = {
   data: Task
   onStatusToggle: (id: Task["id"], isDone: boolean) => void
   onDelete: (id: Task["id"]) => void
 }
 
-export class Todo extends Component<TodoProps> {
-  constructor(props: TodoProps) {
+export class TodoItem extends Component<TodoItemProps> {
+  constructor(props: TodoItemProps) {
     super(props)
   }
 
@@ -33,28 +34,26 @@ export class Todo extends Component<TodoProps> {
     const { title, description, createdAtTimestamp, isDone } = this.props.data
 
     return (
-      <div
-        className={cn(
-          styles.container,
-          "px-4 py-3 rounded-md border",
-          isDone && "opacity-50"
-        )}
-      >
+      <div className={cn(styles.container, "px-5 py-5 rounded-md border")}>
         <div className={cn(styles.info, "relative overflow-hidden")}>
           <div className="flex items-center gap-3">
-            <Checkbox checked={isDone} onCheckedChange={handleToggleStatus} />
+            <Checkbox
+              checked={isDone}
+              onCheckedChange={handleToggleStatus}
+              className="w-6 h-6 rounded-full"
+            />
             <div className="flex flex-col gap-1">
               <p className="font-medium text-xl leading-none">{title}</p>
-              {description && <p>{description}</p>}
+              {description && <p className="text-emerald-600">{description}</p>}
             </div>
             <div className={cn(styles.deleteButton, "ml-auto self-center")}>
-              <Button variant="destructive" onClick={handleDelete}>
-                Delete
+              <Button variant="outline" onClick={handleDelete}>
+                <TrashIcon className="mr-1 -ml-1 h-4 w-4" /> Delete
               </Button>
             </div>
           </div>
           <div className={cn(styles.date, "text-secondary text-right")}>
-            {formatTimestamp(createdAtTimestamp)}
+            {timeAgo(createdAtTimestamp)}
           </div>
         </div>
       </div>
