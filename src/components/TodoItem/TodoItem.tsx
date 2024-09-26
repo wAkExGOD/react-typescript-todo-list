@@ -42,8 +42,10 @@ export class TodoItem extends Component<TodoItemProps> {
               onCheckedChange={handleToggleStatus}
               className="w-6 h-6 rounded-full"
             />
-            <div className="flex flex-col gap-1">
-              <p className="font-medium text-xl leading-none">{title}</p>
+            <div className="flex flex-col gap-1 max-w-[calc(100%-140px)]">
+              <p className="font-medium text-xl leading-none break-words">
+                {title}
+              </p>
               {description && <p className="text-emerald-600">{description}</p>}
             </div>
             <div className={cn(styles.deleteButton, "ml-auto self-center")}>
