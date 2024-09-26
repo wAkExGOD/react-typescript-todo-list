@@ -52,7 +52,7 @@ export class TodoItem extends Component<TodoItemProps> {
               </Button>
             </div>
           </div>
-          <div className={cn(styles.date, "text-secondary text-right")}>
+          <div className={cn(styles.date, "text-green-700 text-right")}>
             {timeAgo(createdAtTimestamp)}
           </div>
         </div>
